@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川渝十日漫游记 - 简化版</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        h1, h2, h3, h4 {
+            color: #0d6efd;
+        }
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .day-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 5px solid #0d6efd;
+        }
+        .highlight {
+            background-color: #e9f5ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            background-color: #f8f9fa;
+        }
+        .tab.active {
+            background-color: #0d6efd;
+            color: white;
+            border-bottom: none;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .place-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .place-card h4 {
+            margin-top: 0;
+            color: #0d6efd;
+        }
+        .price {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .tips-section {
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+        }
+        .city-group {
+            margin-bottom: 30px;
+        }
+        .city-title {
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0d6efd;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .tabs {
+                flex-wrap: wrap;
+            }
+            .tab {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>川渝十日漫游记</h1>
+        <p>探索成都、九寨沟和重庆的深度旅游指南</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('itinerary')">行程安排</div>
+            <div class="tab" onclick="showTab('attractions')">景点介绍</div>
+            <div class="tab" onclick="showTab('accommodations')">住宿推荐</div>
+            <div class="tab" onclick="showTab('food')">美食指南</div>
+            <div class="tab" onclick="showTab('tips')">旅行贴士</div>
+        </div>
+
+        <!-- 行程安排 -->
+        <div id="itinerary" class="tab-content active">
+            <h2>十日行程概览</h2>
+            <div id="days-container"></div>
+        </div>
+
+        <!-- 景点介绍 -->
+        <div id="attractions" class="tab-content">
+            <h2>景点介绍</h2>
+            
+            <div class="city-group">
+                <h3 class="city-title">成都景点</h3>
+                
+                <div class="place-card">
+                    <h4>宽窄巷子</h4>
+                    <p>成都三大历史文化保护区之一，由宽巷子、窄巷子、井巷子组成，是成都遗留下来的清朝古街道，也是体验老成都生活的缩影。</p>
+                    <p><strong>地址：</strong>成都市青羊区长顺街127号</p>
+                    <p><strong>开放时间：</strong>全天</p>
+                    <p><span class="price">门票：免费</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>成都大熊猫繁育研究基地</h4>
+                    <p>中国保护大熊猫研究中心成都基地，是中国政府实施大熊猫等濒危野生动物迁地保护工程的主要研究基地之一，也是大熊猫繁育研究的重要基地。</p>
+                    <p><strong>地址：</strong>成都市成华区熊猫大道1375号</p>
+                    <p><strong>开放时间：</strong>7:30-18:00（建议上午8-10点去，熊猫最活跃）</p>
+                    <p><span class="price">门票：58元/人</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>杜甫草堂</h4>
+                    <p>唐代大诗人杜甫流寓成都时的故居，是中国文学史上的圣地，也是中国古代诗人故居保护最完好的一处。</p>
+                    <p><strong>地址：</strong>成都市青羊区青华路37号</p>
+                    <p><strong>开放时间：</strong>8:00-18:30（冬季8:00-18:00）</p>
+                    <p><span class="price">门票：60元/人</span></p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">九寨沟景点</h3>
+                
+                <div class="place-card">
+                    <h4>九寨沟风景区</h4>
+                    <p>以彩池、叠瀑、雪山、森林"四绝"著称，被誉为"童话世界"。主要景点包括五花海、五彩池、珍珠滩瀑布、诺日朗瀑布等。</p>
+                    <p><strong>地址：</strong>四川省阿坝藏族羌族自治州九寨沟县漳扎镇</p>
+                    <p><strong>开放时间：</strong>旺季(4月1日-11月15日)7:00-18:00，淡季(11月16日-次年3月31日)8:00-17:00</p>
+                    <p><span class="price">门票：旺季190元/人，淡季80元/人，观光车票110元/人</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>黄龙景区</h4>
+                    <p>以彩池、雪山、峡谷、森林"四绝"著称，被誉为"人间瑶池"。主要景点包括五彩池、金沙铺地、洗身洞等。</p>
+                    <p><strong>地址：</strong>四川省阿坝藏族羌族自治州松潘县</p>
+                    <p><strong>开放时间：</strong>旺季(4月1日-11月15日)7:00-18:00，淡季(11月16日-次年3月31日)9:00-16:00</p>
+                    <p><span class="price">门票：旺季200元/人，淡季60元/人</span></p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">重庆景点</h3>
+                
+                <div class="place-card">
+                    <h4>洪崖洞</h4>
+                    <p>重庆市地标建筑，融合吊脚楼、山城步道等巴渝传统建筑风貌，是游览重庆的必去景点。</p>
+                    <p><strong>地址：</strong>重庆市渝中区解放碑沧白路56号</p>
+                    <p><strong>开放时间：</strong>全天（建议晚上观赏夜景）</p>
+                    <p><span class="price">门票：免费</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>磁器口古镇</h4>
+                    <p>始建于宋代的古镇，是重庆著名的历史文化街区，保留了完整的明清风貌。</p>
+                    <p><strong>地址：</strong>重庆市沙坪坝区磁器口古镇</p>
+                    <p><strong>开放时间：</strong>全天</p>
+                    <p><span class="price">门票：免费</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>李子坝轻轨站</h4>
+                    <p>世界上唯一建在居民楼中穿楼而过的轻轨站，是重庆"魔幻城市"的代表。</p>
+                    <p><strong>地址：</strong>重庆市渝中区李子坝正街</p>
+                    <p><strong>开放时间：</strong>全天（轻轨运行时间6:30-22:30）</p>
+                    <p><span class="price">乘坐轻轨约3元/次</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 住宿推荐 -->
+        <div id="accommodations" class="tab-content">
+            <h2>住宿推荐</h2>
+            
+            <div class="city-group">
+                <h3 class="city-title">成都住宿</h3>
+                
+                <div class="place-card">
+                    <h4>成都太古里亚朵酒店</h4>
+                    <p>位于成都市中心地带，毗邻太古里商圈，交通便利，设计感强，服务优质。</p>
+                    <p><strong>地址：</strong>成都市锦江区中纱帽街8号</p>
+                    <p><span class="price">价格：400-600元/晚</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>成都宽窄巷子民宿</h4>
+                    <p>位于宽窄巷子附近，交通便利，体验老成都生活的绝佳选择。</p>
+                    <p><strong>地址：</strong>成都市青羊区宽窄巷子周边</p>
+                    <p><span class="price">价格：300-500元/晚</span></p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">九寨沟住宿</h3>
+                
+                <div class="place-card">
+                    <h4>九寨沟千鹤国际大酒店</h4>
+                    <p>位于九寨沟景区入口处，是距离景区最近的酒店之一，设施完善，服务周到。</p>
+                    <p><strong>地址：</strong>四川省阿坝藏族羌族自治州九寨沟县漳扎镇</p>
+                    <p><span class="price">价格：350-550元/晚</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>九寨天堂洲际大饭店</h4>
+                    <p>五星级酒店，环境优美，设施齐全，是九寨沟地区最豪华的酒店之一。</p>
+                    <p><strong>地址：</strong>四川省阿坝藏族羌族自治州九寨沟县</p>
+                    <p><span class="price">价格：800-1200元/晚</span></p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">重庆住宿</h3>
+                
+                <div class="place-card">
+                    <h4>重庆来福士雅诗阁服务公寓</h4>
+                    <p>位于重庆市中心的豪华服务式公寓，紧邻解放碑商圈，交通便利，设施齐全。</p>
+                    <p><strong>地址：</strong>重庆市渝中区民权路2号</p>
+                    <p><span class="price">价格：480-700元/晚</span></p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>洪崖洞民宿</h4>
+                    <p>位于洪崖洞附近，可以欣赏到洪崖洞夜景，体验重庆山城风情。</p>
+                    <p><strong>地址：</strong>重庆市渝中区洪崖洞附近</p>
+                    <p><span class="price">价格：350-600元/晚</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 美食指南 -->
+        <div id="food" class="tab-content">
+            <h2>美食指南</h2>
+            
+            <div class="city-group">
+                <h3 class="city-title">成都美食</h3>
+                
+                <div class="place-card">
+                    <h4>火锅</h4>
+                    <p>推荐：大蓉和、蜀九香、小龙坎火锅</p>
+                    <p>特色：麻辣鲜香，可根据个人口味选择麻辣程度</p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>串串香</h4>
+                    <p>推荐：马路边边、钢管厂小郡肝串串</p>
+                    <p>特色：麻辣鲜香，食材丰富，自由搭配</p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>小吃</h4>
+                    <p>推荐：龙抄手、夫妻肺片、担担面、三大炮、钟水饺</p>
+                    <p>特色：各具特色，价格实惠，口味地道</p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">九寨沟美食</h3>
+                
+                <div class="place-card">
+                    <h4>藏餐</h4>
+                    <p>推荐：酥油茶、糌粑、青稞酒、牦牛肉</p>
+                    <p>特色：高原特色食物，营养丰富，口味独特</p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>农家菜</h4>
+                    <p>推荐：洋芋糍粑、酸菜鱼、腊肉</p>
+                    <p>特色：食材新鲜，烹饪简单，原汁原味</p>
+                </div>
+            </div>
+            
+            <div class="city-group">
+                <h3 class="city-title">重庆美食</h3>
+                
+                <div class="place-card">
+                    <h4>火锅</h4>
+                    <p>推荐：刘一手、陶然居、秦妈火锅</p>
+                    <p>特色：麻辣鲜香，油而不腻，九宫格火锅最为经典</p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>小面</h4>
+                    <p>推荐：好又来、渝中一绝、陈麻婆小面</p>
+                    <p>特色：麻辣鲜香，面条劲道，汤底浓郁</p>
+                </div>
+                
+                <div class="place-card">
+                    <h4>小吃</h4>
+                    <p>推荐：酸辣粉、山城小汤圆、磁器口陈麻花、重庆怪味胡豆</p>
+                    <p>特色：各具特色，价格实惠，口味地道</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 旅行贴士 -->
+        <div id="tips" class="tab-content">
+            <h2>旅行贴士</h2>
+            
+            <div class="tips-section">
+                <h3>最佳旅游时间</h3>
+                <p>春季（3-5月）和秋季（9-11月）是游览川渝地区的最佳时节，气候宜人，景色优美。九寨沟秋季（9-10月）红叶与碧水相映，景色最为壮观。夏季（6-8月）是雨季，重庆尤其炎热潮湿。冬季（12-2月）九寨沟积雪覆盖，别有一番风味，但部分景点可能因积雪关闭。</p>
+            </div>
+            
+            <div class="tips-section">
+                <h3>交通建议</h3>
+                <p>成都到九寨沟：可选择飞机（约50分钟）或旅游大巴（约8-9小时）。飞机票价约800-1500元，大巴票价约150-250元。</p>
+                <p>九寨沟到黄龙：可乘坐旅游大巴，约1.5小时车程。</p>
+                <p>成都到重庆：高铁最为便捷，约1.5-2小时，票价约150-200元。</p>
+                <p>重庆市内交通：轻轨和公交覆盖面广，也可使用打车软件。重庆地形复杂，建议提前规划路线。</p>
+            </div>
+            
+            <div class="tips-section">
+                <h3>高原反应提示</h3>
+                <p>九寨沟海拔较高（约2000-3000米），部分游客可能出现高原反应。建议：</p>
+                <ul>
+                    <li>提前1-2周服用红景天等预防药物</li>
+                    <li>抵达后不要剧烈运动，充分休息适应高原环境</li>
+                    <li>多喝水，少吃油腻食物</li>
+                    <li>携带常用药物，如感冒药、肠胃药、止痛药等</li>
+                    <li>如出现严重高原反应，应立即下山就医</li>
+                </ul>
+            </div>
+            
+            <div class="tips-section">
+                <h3>饮食建议</h3>
+                <p>川渝地区饮食以麻辣为主，不习惯的游客可要求减少辣度。</p>
+                <p>多喝水，少饮酒，以免引起肠胃不适。</p>
+                <p>尝试当地特色美食，但注意卫生和适量。</p>
+                <p>九寨沟地区物价较高，可适当自带零食。</p>
+            </div>
+            
+            <div class="tips-section">
+                <h3>行李准备</h3>
+                <p>春秋季：轻便衣物为主，带一件外套应对早晚温差</p>
+                <p>夏季：防晒用品、雨具、驱蚊用品</p>
+                <p>冬季：保暖衣物、防滑鞋</p>
+                <p>其他：常用药品、相机、充电宝、身份证和足够现金</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 川渝十日漫游记 - 旅游指南</p>
+        <p>祝您旅途愉快！</p>
+    </footer>
+
+    <script>
+        // 行程数据
+        const days = [
+            { day: 1, city: "成都", title: "初探天府之国", transport: "✈️ 大连 → 成都", highlight: "宽窄巷子与锦里古街", desc: "抵达成都后，前往宽窄巷子感受老成都的市井文化，晚上在锦里古街品尝各类地道小吃。" },
+            { day: 2, city: "成都", title: "熊猫与文化", transport: "市内交通", highlight: "成都大熊猫繁育研究基地", desc: "上午参观成都大熊猫繁育研究基地，近距离观赏国宝；下午游览武侯祠，感受三国文化底蕴；晚上观看川剧变脸表演。" },
+            { day: 3, city: "成都", title: "悠闲与美食", transport: "市内交通", highlight: "文殊院与成都美食", desc: "上午游览文殊院，感受老成都茶馆文化；下午逛太古里或杜甫草堂；晚上在玉林路小酒馆周边品尝地道美食。" },
+            { day: 4, city: "九寨沟", title: "穿越山水赴仙境", transport: "✈️/🚌 成都 → 九寨沟", highlight: "前往九寨沟", desc: "从成都出发前往九寨沟，飞机约50分钟，大巴约8小时；抵达后入住酒店，适应高原气候。" },
+            { day: 5, city: "九寨沟", title: "人间仙境深度游", transport: "景区观光车", highlight: "九寨沟景区全天游览", desc: "全天游览九寨沟景区，欣赏树正群海、诺日朗瀑布、五花海、珍珠滩、长海、五彩池等绝美景点。" },
+            { day: 6, city: "九寨沟/黄龙", title: "仙境余韵与归程", transport: "景区观光车/🚌/✈️", highlight: "黄龙景区", desc: "上午可选择游览黄龙景区或九寨沟二次入园；下午返回成都，结束九寨沟之旅。" },
+            { day: 7, city: "成都/重庆", title: "天府之国到魔幻山城", transport: "高铁", highlight: "重庆洪崖洞夜景", desc: "上午在成都自由活动；下午乘高铁前往重庆(约1.5小时)；晚上品尝重庆火锅，游览洪崖洞夜景。" },
+            { day: 8, city: "重庆", title: "魔幻与历史的交织", transport: "市内交通", highlight: "李子坝轻轨站与磁器口", desc: "上午参观李子坝轻轨站穿楼奇景，游览磁器口古镇；下午乘坐长江索道，参观鹅岭贰厂文创公园；晚上品尝江湖菜。" },
+            { day: 9, city: "重庆", title: "山城深度体验", transport: "市内交通", highlight: "人民大礼堂与三峡博物馆", desc: "上午参观人民大礼堂与三峡博物馆；下午漫步十八梯传统风貌区；傍晚在南滨路欣赏两江夜景。" },
+            { day: 10, city: "重庆", title: "告别魔幻山城", transport: "✈️ 重庆 → 返程", highlight: "购买伴手礼，返程", desc: "上午自由活动，购买特色伴手礼如火锅底料、陈麻花、怪味胡豆等；下午前往机场，结束愉快的川渝之旅。" }
+        ];
+
+        // 渲染行程
+        document.getElementById('days-container').innerHTML = days.map(day => `
+            <div class="day-card">
+                <h3>第${day.day}天：${day.title}</h3>
+                <p><strong>城市：</strong>${day.city}</p>
+                <p><strong>交通：</strong>${day.transport}</p>
+                <p>${day.desc}</p>
+                <div class="highlight">
+                    <p><strong>当日亮点：</strong>${day.highlight}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // 切换标签
+        function showTab(tabId) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 更新标签样式
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 设置当前标签为活动状态
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html> 
