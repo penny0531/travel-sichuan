@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大连-成都-重庆 交互式旅游指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=9d4cfaadc1662d1da2db7afcadac99df"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps/plugin?v=2.0&plugin=AMap.ToolBar,AMap.Driving,AMap.Walking,AMap.Transfer,AMap.Scale,AMap.PolyEditor,AMap.Geolocation"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Calm Harmony (Warm Neutrals with Muted Teal/Terracotta accents) -->
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #f8f7f4;
+        }
+        .active-nav {
+            background-color: #0d9488;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .inactive-nav {
+            background-color: #f0f0f0;
+            color: #374151;
+        }
+        .active-day {
+            background-color: #14b8a6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .inactive-day {
+            background-color: white;
+            color: #111827;
+        }
+        .content-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        .map-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+            .map-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-teal-800">川渝十日漫游记</h1>
+            <nav id="main-nav" class="flex space-x-2 sm:space-x-4 mt-4 sm:mt-0 rounded-lg p-1 bg-gray-200">
+                <button data-view="itinerary" class="nav-button active-nav px-4 py-2 rounded-md font-semibold transition-all duration-300">每日行程</button>
+                <button data-view="accommodations" class="nav-button inactive-nav px-4 py-2 rounded-md font-semibold transition-all duration-300">食宿一览</button>
+                <button data-view="map" class="nav-button inactive-nav px-4 py-2 rounded-md font-semibold transition-all duration-300">地图导航</button>
+                <button data-view="tips" class="nav-button inactive-nav px-4 py-2 rounded-md font-semibold transition-all duration-300">旅行贴士</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div id="itinerary-view">
+            <div class="mb-6">
+                <p class="text-center text-gray-600 mb-4">欢迎来到您的川渝十日深度之旅交互式指南！请点击下方的日期按钮，探索每一天的详细安排、景点特色和美食推荐。我们将从成都的悠闲慢生活开始，深入体验，随后前往如画的九寨沟，最后抵达魔幻山城重庆，感受其独特魅力。</p>
+            </div>
+            <div id="day-selector" class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-2 md:gap-3 mb-8">
+            </div>
+            <div id="daily-content" class="space-y-6">
+            </div>
+        </div>
+
+        <div id="accommodations-view" class="hidden">
+             <div class="mb-6">
+                <h2 class="text-2xl font-bold text-center mb-2 text-teal-700">食宿一览</h2>
+                <p class="text-center text-gray-600 mb-4">这里汇总了行程中推荐的所有酒店与高品质民宿。我们为您筛选了**500元以内、网评4-5钻（高品质）**的精选住宿，以及高分餐厅。您可以通过下方的按钮筛选城市，快速找到心仪的食宿选择，并直观地通过图表比较两地的平均消费水平。请注意，价格为参考，可能因季节和预订时间有所波动。</p>
+            </div>
+            <div class="flex justify-center space-x-4 mb-8">
+                <button data-filter="all" class="filter-btn active-day px-6 py-2 rounded-full font-semibold transition-all duration-300">全部</button>
+                <button data-filter="成都" class="filter-btn inactive-day px-6 py-2 rounded-full font-semibold transition-all duration-300">成都</button>
+                <button data-filter="九寨沟" class="filter-btn inactive-day px-6 py-2 rounded-full font-semibold transition-all duration-300">九寨沟</button>
+                <button data-filter="重庆" class="filter-btn inactive-day px-6 py-2 rounded-full font-semibold transition-all duration-300">重庆</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="content-card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-600">🏨 推荐酒店/民宿</h3>
+                    <div id="hotel-list" class="space-y-4"></div>
+                </div>
+                <div class="content-card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-600">🍜 推荐餐厅</h3>
+                    <div id="restaurant-list" class="space-y-4"></div>
+                </div>
+            </div>
+            <div class="content-card p-6">
+                <h3 class="text-xl font-bold mb-4 text-center text-teal-600">食宿消费概览</h3>
+                <p class="text-center text-gray-600 text-sm mb-4">此图表展示了成都、九寨沟和重庆推荐酒店与餐厅的人均消费范围，帮助您更好地规划预算。</p>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="map-view" class="hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-center mb-2 text-teal-700">旅游地图</h2>
+                <p class="text-center text-gray-600 mb-4">这里展示了整个行程的地图视图，包括景点、酒店和餐厅的精确位置。您可以选择查看不同日期的行程路线，或探索特定类型的地点。地图支持路线规划，帮助您更好地了解交通安排和距离。</p>
+            </div>
+            <div class="flex justify-center space-x-4 mb-4">
+                <div class="inline-flex rounded-md shadow-sm">
+                    <select id="map-day-selector" class="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option value="all">全部行程</option>
+                        <option value="1">第1天</option>
+                        <option value="2">第2天</option>
+                        <option value="3">第3天</option>
+                        <option value="4">第4天</option>
+                        <option value="5">第5天</option>
+                        <option value="6">第6天</option>
+                        <option value="7">第7天</option>
+                        <option value="8">第8天</option>
+                        <option value="9">第9天</option>
+                        <option value="10">第10天</option>
+                    </select>
+                    <select id="map-type-selector" class="bg-white border-t border-b border-r border-gray-300 text-gray-700 py-2 px-4 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option value="all">所有地点</option>
+                        <option value="attractions">景点</option>
+                        <option value="hotels">住宿</option>
+                        <option value="restaurants">餐厅</option>
+                    </select>
+                </div>
+            </div>
+            <div class="content-card p-0 overflow-hidden">
+                <div id="map-container" class="map-container"></div>
+            </div>
+            <div class="mt-6">
+                <div id="map-info" class="content-card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-600">地点详情</h3>
+                    <p class="text-gray-600">选择地图上的标记点查看详细信息，包括地址、营业时间、交通方式等。您也可以点击下方的"路线规划"按钮，获取从当前位置到该地点的最佳路线。</p>
+                    <div id="location-details" class="mt-4 hidden">
+                        <div class="border-l-4 border-teal-500 pl-4 py-2">
+                            <h4 id="location-name" class="font-bold text-lg"></h4>
+                            <p id="location-address" class="text-sm text-gray-600 mt-1"></p>
+                            <p id="location-info" class="text-sm mt-2"></p>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <button id="btn-driving" class="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700 transition-colors">驾车路线</button>
+                            <button id="btn-walking" class="bg-amber-600 text-white px-4 py-2 rounded-md text-sm hover:bg-amber-700 transition-colors">步行路线</button>
+                            <button id="btn-transit" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700 transition-colors">公交路线</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tips-view" class="hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-center mb-2 text-teal-700">旅行贴士</h2>
+                <p class="text-center text-gray-600 max-w-2xl mx-auto">这里集合了来自各大平台的高赞旅行建议。点击每个标题可以展开查看详细内容，这些实用贴士将为您的川渝之旅保驾护航，让您玩得更舒心、更地道。</p>
+            </div>
+            <div id="tips-accordion" class="max-w-3xl mx-auto space-y-3">
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 bg-white mt-8">
+        <p class="text-gray-500">&copy; 2025 交互式旅游指南. 祝您旅途愉快！</p>
+    </footer>
+
+    <!-- 引入数据和脚本文件 -->
+    <script src="travel-data.js"></script>
+    <script src="map-utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
