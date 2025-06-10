@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川渝十日漫游记 - 交互式旅游指南</title>
+    <meta http-equiv="refresh" content="0; url=chuan-yu-travel.html">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f8f7f4;
+            color: #333;
+            text-align: center;
+            padding-top: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .loading {
+            margin-top: 30px;
+            font-size: 18px;
+        }
+        .redirect-link {
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .redirect-link:hover {
+            text-decoration: underline;
+        }
+        .loader {
+            margin: 30px auto;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #0d9488;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>川渝十日漫游记</h1>
+    <p>正在加载交互式旅游指南，请稍候...</p>
+    
+    <div class="loader"></div>
+    
+    <p class="loading">
+        如果页面没有自动跳转，请点击 
+        <a href="chuan-yu-travel.html" class="redirect-link">这里</a> 手动进入。
+    </p>
+</body>
+</html> 
